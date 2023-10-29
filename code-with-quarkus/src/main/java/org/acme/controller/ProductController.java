@@ -2,7 +2,7 @@ package org.acme.controller;
 
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-
+import jakarta.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.ws.rs.core.MediaType;
@@ -14,6 +14,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -28,6 +29,15 @@ public class ProductController {
     @GET
     public Response retrieveProducts() {
         return productService.findAllProducts();
+    }
+
+    @GET
+    @Path("/search")
+    public Response retrievePageOfProducts(@QueryParam("page") @DefaultValue("1") int pageIndex,
+            @QueryParam("size") @DefaultValue("10") int pageSize) {
+        System.out.println(pageIndex);
+        System.out.println(pageSize);
+        return productService.getPageOfProducts(pageIndex, pageSize);
     }
 
     @GET

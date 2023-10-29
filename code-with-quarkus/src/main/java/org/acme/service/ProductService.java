@@ -2,15 +2,16 @@ package org.acme.service;
 
 import org.acme.entities.Product;
 import org.acme.repository.ProductRepository;
+
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
-
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
@@ -102,4 +103,12 @@ public class ProductService {
             return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+    public Response getPageOfProducts(int pageIndex, int pageSize) {
+        PanacheQuery<Product> products = productRepository.findAll();
+        products.page(Page.ofSize(pageSize));
+        System.out.println(products.pageCount());
+        System.out.println(pageIndex);
+        System.out.println(pageSize);
+        return Response.ok(products.page(Page.of(pageIndex - 1, pageSize)).list()).build();
+    }
 }
