@@ -48,7 +48,7 @@ public class ProductService {
         newProduct.setName(product.getName());
         newProduct.setDescription(product.getDescription());
         newProduct.setExpiry_date(product.getExpiry_date());
-        newProduct.setQuantity(newProduct.getQuantity());
+        newProduct.setQuantity(product.getQuantity());
         productRepository.persist(newProduct);
 
         if (productRepository.isPersistent(newProduct))

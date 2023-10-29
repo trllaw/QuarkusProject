@@ -7,7 +7,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class ProductDTO {
     @Schema(description = "Product Name.")
     private String name;
-    @Schema(defaultValue = "0", description = "Product Quantity in stock. Must be a positive value.")
+    @Schema(description = "Product Quantity in stock. Must be a positive value.")
     private long quantity;
     @Schema(description = "Product description")
     private String description;
