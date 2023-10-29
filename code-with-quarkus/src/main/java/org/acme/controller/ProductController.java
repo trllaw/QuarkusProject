@@ -31,7 +31,8 @@ public class ProductController {
     ProductService productService;
 
     @GET
-    @Operation(description = "Get all Products in the database")
+    @Operation(description = "Get all Products in the database if it has any")
+    @APIResponse(responseCode = "200", description = "Return a list with all Products in the database if it has any")
     public Response retrieveProducts() {
         return productService.findAllProducts();
     }
@@ -39,6 +40,7 @@ public class ProductController {
     @GET
     @Path("/search")
     @Operation(description = "Get all Products in the database and divide them in pages. The deault value for page size is 10. The deault value for page index is 1")
+    @APIResponse(responseCode = "200", description = "Return the requested page with the a list of products from that page")
     public Response retrievePageOfProducts(@QueryParam("page") @DefaultValue("1") int pageIndex,
             @QueryParam("size") @DefaultValue("10") int pageSize) {
         System.out.println(pageIndex);
@@ -48,14 +50,17 @@ public class ProductController {
 
     @GET
     @Path("/{id}")
-    @Operation()
+    @Operation(description = "Try to get the product with the parameter ID")
     @APIResponse(responseCode = "404", description = "Product non-existent or removed.")
+    @APIResponse(responseCode = "200", description = "Get the Product that has the same ID")
     public Response retrieveProductById(@PathParam("id") Long id) {
         return productService.findProductById(id);
     }
 
     @GET
     @Path("/valid")
+    @Operation(description = "Get all the Products that have not expired")
+    @APIResponse(responseCode = "200", description = "Get a list with the Products that have not expired")
     public List<Product> retrieveValidProducts() {
         LocalDate date = LocalDate.now();
         List<Product> products = new ArrayList<>();
@@ -70,6 +75,9 @@ public class ProductController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @Operation(description = "Add a new Product if Valid")
+    @APIResponse(responseCode = "400", description = "The product is invalid. Verify if all the values are valid.")
+    @APIResponse(responseCode = "201", description = "The Product was added successfully. Return a URI to the Product.")
     public Response addProduct(ProductDTO product) {
         return productService.addProduct(product);
     }
@@ -77,6 +85,9 @@ public class ProductController {
     @DELETE
     @Transactional
     @Path("/{id}")
+    @Operation(description = "Remove the Product with the parameter ID if possible.")
+    @APIResponse(responseCode = "404", description = "The product Was not found to be removed.")
+    @APIResponse(responseCode = "200", description = "The Product was Removed successfully.")
     public Response deleteByProduct(@PathParam("id") Long id) {
         return productService.removeProductById(id);
     }
@@ -84,6 +95,10 @@ public class ProductController {
     @PUT
     @Transactional
     @Path("/{id}")
+    @Operation(description = "Update the Product with the parameter ID if possible.")
+    @APIResponse(responseCode = "400", description = "The product is invalid. Verify if all the values are valid.")
+    @APIResponse(responseCode = "404", description = "The product Was not found to be Updated.")
+    @APIResponse(responseCode = "202", description = "The Product was updated successfully. Return a URI to the Product.")
     public Response updateProduct(@PathParam("id") Long id, ProductDTO newProduct) {
         return productService.updateProduct(id, newProduct);
     }

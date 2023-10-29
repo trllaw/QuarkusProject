@@ -52,7 +52,8 @@ public class ProductService {
         productRepository.persist(newProduct);
 
         if (productRepository.isPersistent(newProduct))
-            return Response.created(URI.create("/product/" + newProduct.id)).build();
+            return Response.created(URI.create("/product/" + newProduct.id))
+                    .entity(URI.create("/product/" + newProduct.id)).build();
         else
             return Response.status(Response.Status.BAD_REQUEST).build();
     }
@@ -62,7 +63,7 @@ public class ProductService {
         if (!optionalProduct.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
         if (productRepository.deleteById(id))
-            return Response.ok(URI.create("/product/")).build();
+            return Response.ok().build();
         else
             return Response.notModified().build();
     }
@@ -102,7 +103,8 @@ public class ProductService {
 
             productRepository.persist(product);
             if (productRepository.isPersistent(product))
-                return Response.accepted(URI.create("/product/" + product.id)).build();
+                return Response.accepted(URI.create("/product/" + product.id))
+                        .entity(URI.create("/product/" + product.id)).build();
             else
                 return Response.notModified().build();
 
