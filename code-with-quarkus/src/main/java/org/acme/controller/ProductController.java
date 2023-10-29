@@ -8,7 +8,11 @@ import java.util.List;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.entities.Product;
+import org.acme.entities.ProductDTO;
 import org.acme.service.ProductService;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+
 import java.time.LocalDate;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -27,12 +31,14 @@ public class ProductController {
     ProductService productService;
 
     @GET
+    @Operation(description = "Get all Products in the database")
     public Response retrieveProducts() {
         return productService.findAllProducts();
     }
 
     @GET
     @Path("/search")
+    @Operation(description = "Get all Products in the database and divide them in pages. The deault value for page size is 10. The deault value for page index is 1")
     public Response retrievePageOfProducts(@QueryParam("page") @DefaultValue("1") int pageIndex,
             @QueryParam("size") @DefaultValue("10") int pageSize) {
         System.out.println(pageIndex);
@@ -42,6 +48,8 @@ public class ProductController {
 
     @GET
     @Path("/{id}")
+    @Operation()
+    @APIResponse(responseCode = "404", description = "Product non-existent or removed.")
     public Response retrieveProductById(@PathParam("id") Long id) {
         return productService.findProductById(id);
     }
@@ -62,7 +70,7 @@ public class ProductController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response addProduct(Product product) {
+    public Response addProduct(ProductDTO product) {
         return productService.addProduct(product);
     }
 
@@ -76,7 +84,7 @@ public class ProductController {
     @PUT
     @Transactional
     @Path("/{id}")
-    public Response updateProduct(@PathParam("id") Long id, Product newProduct) {
+    public Response updateProduct(@PathParam("id") Long id, ProductDTO newProduct) {
         return productService.updateProduct(id, newProduct);
     }
 }

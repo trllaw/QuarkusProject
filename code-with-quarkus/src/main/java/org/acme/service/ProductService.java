@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import org.acme.entities.Product;
+import org.acme.entities.ProductDTO;
 import org.acme.repository.ProductRepository;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
@@ -30,7 +31,7 @@ public class ProductService {
         return productRepository.find("expiry_date > :now order by id", Parameters.with("now", date)).list();
     }
 
-    public Response addProduct(Product product) {
+    public Response addProduct(ProductDTO product) {
         if (Objects.isNull(product.getQuantity()) || product.getQuantity() < 0)
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("The Product must have a quantity that is a positive value").build();
@@ -43,9 +44,15 @@ public class ProductService {
         if (Objects.isNull(product.getExpiry_date()))
             return Response.status(Response.Status.BAD_REQUEST).entity("The Product must have a expiry date").build();
 
-        productRepository.persist(product);
-        if (productRepository.isPersistent(product))
-            return Response.created(URI.create("/product/" + product.id)).build();
+        Product newProduct = new Product();
+        newProduct.setName(product.getName());
+        newProduct.setDescription(product.getDescription());
+        newProduct.setExpiry_date(product.getExpiry_date());
+        newProduct.setQuantity(newProduct.getQuantity());
+        productRepository.persist(newProduct);
+
+        if (productRepository.isPersistent(newProduct))
+            return Response.created(URI.create("/product/" + newProduct.id)).build();
         else
             return Response.status(Response.Status.BAD_REQUEST).build();
     }
@@ -68,7 +75,7 @@ public class ProductService {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    public Response updateProduct(Long id, Product newProduct) {
+    public Response updateProduct(Long id, ProductDTO newProduct) {
         Optional<Product> optionalProduct = productRepository.findByIdOptional(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();

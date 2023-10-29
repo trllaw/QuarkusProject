@@ -4,13 +4,7 @@ import java.time.LocalDate;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Cacheable;
-import jakarta.persistence.Entity;
-
-@Entity
-@Cacheable
-public class Product extends PanacheEntity {
+public class ProductDTO {
     @Schema(description = "Product Name.")
     private String name;
     @Schema(defaultValue = "0", description = "Product Quantity in stock. Must be a positive value.")
