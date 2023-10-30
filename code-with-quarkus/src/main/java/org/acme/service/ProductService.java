@@ -83,17 +83,20 @@ public class ProductService {
             if (Objects.nonNull(newProduct.getName()))
                 product.setName(newProduct.getName());
             else
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("The Product must have a name with 5 or more characters").build();
 
             if (Objects.nonNull(newProduct.getDescription()))
                 product.setDescription(newProduct.getDescription());
             else
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("The Product must have a description with 5 or more characters").build();
 
             if (Objects.nonNull(newProduct.getExpiry_date()))
                 product.setExpiry_date(newProduct.getExpiry_date());
             else
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("The Product must have a expiry date")
+                        .build();
 
             if (Objects.nonNull(newProduct.getQuantity()) && newProduct.getQuantity() >= 0)
                 product.setQuantity(newProduct.getQuantity());

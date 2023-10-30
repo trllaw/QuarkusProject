@@ -10,7 +10,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import java.time.LocalDate;
-import org.acme.entities.Product;
 import org.acme.entities.ProductDTO;
 import org.apache.http.HttpHeaders;
 
