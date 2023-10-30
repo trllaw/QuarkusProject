@@ -12,7 +12,6 @@ import org.acme.entities.ProductDTO;
 import org.acme.service.ProductService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-
 import java.time.LocalDate;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -43,8 +42,6 @@ public class ProductController {
     @APIResponse(responseCode = "200", description = "Return the requested page with the a list of products from that page")
     public Response retrievePageOfProducts(@QueryParam("page") @DefaultValue("1") int pageIndex,
             @QueryParam("size") @DefaultValue("10") int pageSize) {
-        System.out.println(pageIndex);
-        System.out.println(pageSize);
         return productService.getPageOfProducts(pageIndex, pageSize);
     }
 

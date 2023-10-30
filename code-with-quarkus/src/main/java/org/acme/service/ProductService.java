@@ -115,9 +115,6 @@ public class ProductService {
     public Response getPageOfProducts(int pageIndex, int pageSize) {
         PanacheQuery<Product> products = productRepository.findAll();
         products.page(Page.ofSize(pageSize));
-        System.out.println(products.pageCount());
-        System.out.println(pageIndex);
-        System.out.println(pageSize);
         return Response.ok(products.page(Page.of(pageIndex - 1, pageSize)).list()).build();
     }
 }

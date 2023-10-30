@@ -147,6 +147,21 @@ public class ProductControllerTest {
 
         @Test
         @Order(4)
+        public void testGetProductPagesEndPoint() {
+                given().when().get("/product/search?page=1&size=2")
+                                .then()
+                                .statusCode(200)
+                                .body(is("[{\"id\":1,\"name\":\"Product 1\",\"quantity\":5,\"description\":\"Product Description\",\"expiry_date\":\"2025-05-15\"},{\"id\":2,\"name\":\"Product 2\",\"quantity\":65,\"description\":\"Another Product Description\",\"expiry_date\":\"2020-12-06\"}]"));
+
+                given().when().get("/product/search?page=2&size=2")
+                                .then()
+                                .statusCode(200)
+                                .body(is("[{\"id\":3,\"name\":\"Product 3 - 2\",\"quantity\":1,\"description\":\"new description\",\"expiry_date\":\"2026-05-15\"}]"));
+
+        }
+
+        @Test
+        @Order(5)
         public void testDeleteProductEndPoint() {
                 // -- Delete Invalid Product
                 given().when().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).delete("/product/5")
